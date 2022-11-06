@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SpotiFylterMobile</string>
+    <string name="attr_acousticness">Acousticness</string>
+    <string name="attr_danceability">Danceability</string>
+    <string name="attr_energy">Energy</string>
+    <string name="attr_instrumentalness">Instrumentalness</string>
+    <string name="attr_liveness">Liveness</string>
+    <string name="attr_speechiness">Speechiness</string>
+    <string name="attr_valence">Valence</string>
+</resources>
