@@ -1,12 +1,11 @@
 package com.rafaelwitak.spotifyltermobile
 
 import android.app.Application
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.adamratzman.spotify.notifications.AbstractSpotifyBroadcastReceiver
+import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
 import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
 import com.rafaelwitak.spotifyltermobile.util.AudioFeature
@@ -24,18 +23,29 @@ class FylterViewModel(application: Application) :
         get() = getApplication()
 
     val featureSettings = model.featureSettings
-
-    private fun hasInternet(): Boolean {
-        val connectivityManager: ConnectivityManager =
-            app.getSystemService(
-                ConnectivityManager::class.java
-            )
-        val activeNetwork: Network? = connectivityManager.activeNetwork
-        val capabilities: NetworkCapabilities? =
-            connectivityManager.getNetworkCapabilities(activeNetwork)
-        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-            ?: false
+    val spotifyBroadcastReceiver = object : AbstractSpotifyBroadcastReceiver() {
+        override fun onMetadataChanged(data: SpotifyMetadataChangedData) {
+            super.onMetadataChanged(data)
+            this@FylterViewModel.onMetadataChanged(data)
+        }
     }
+
+    fun onMetadataChanged(data: SpotifyMetadataChangedData) {
+        Log.i("com.adamratzman.spotify", "Spotify Metadata changed: $data")
+        viewModelScope.launch { skipIfNotMatching() }
+    }
+
+//    private fun hasInternet(): Boolean {
+//        val connectivityManager: ConnectivityManager =
+//            app.getSystemService(
+//                ConnectivityManager::class.java
+//            )
+//        val activeNetwork: Network? = connectivityManager.activeNetwork
+//        val capabilities: NetworkCapabilities? =
+//            connectivityManager.getNetworkCapabilities(activeNetwork)
+//        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+//            ?: false
+//    }
 
     private suspend fun notifyBoundsChanged(featureSetting: AudioFeatureSetting) {
         Log.i(
@@ -44,9 +54,7 @@ class FylterViewModel(application: Application) :
                     + featureSetting.lowerBound + "-"
                     + featureSetting.upperBound
         )
-        skipIfNotMatching() { skipped ->
-            if (skipped) app.toast("Track skipped")
-        }
+        skipIfNotMatching()
     }
 
     private suspend fun skipIfNotMatching(onSkipped: (Boolean) -> Unit = {}) {
@@ -55,6 +63,7 @@ class FylterViewModel(application: Application) :
                 if (!features.allowedBy(featureSettings)) {
                     player?.skipForward().also {
                         onSkipped(true)
+                        app.toast("Track skipped")
                         Log.i("com.adamratzman.spotify", it.toString())
                     }
                 }

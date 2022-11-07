@@ -2,6 +2,8 @@ package com.rafaelwitak.spotifyltermobile.gui
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.adamratzman.spotify.notifications.SpotifyBroadcastType
+import com.adamratzman.spotify.notifications.registerSpotifyBroadcastReceiver
 import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.FylterViewModel
 import com.rafaelwitak.spotifyltermobile.databinding.ActivityMainBinding
@@ -18,6 +20,7 @@ class MainActivity : BaseActivity() {
 
         binding.settings = vm.featureSettings
         setUpSliders()
+        registerSpotifyBroadcastReceiver(vm.spotifyBroadcastReceiver, SpotifyBroadcastType.MetadataChanged)
     }
 
     private fun setUpSliders() {
