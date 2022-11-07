@@ -9,11 +9,8 @@ class SpotiFylterApplication : Application() {
         instance = this
     }
     
-    lateinit var model: Model
-
     override fun onCreate() {
         super.onCreate()
-        model = Model
         AppCompatDelegate.setDefaultNightMode(
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         )
@@ -21,6 +18,8 @@ class SpotiFylterApplication : Application() {
 
     companion object {
         private lateinit var instance: SpotiFylterApplication
+
+        // TODO: Check if leak-proof
         val context: Context
             get() = instance.applicationContext
     }

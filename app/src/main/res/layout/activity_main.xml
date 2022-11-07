@@ -43,7 +43,7 @@
                     android:id="@+id/acousticness_slider"
                     android:tag="@{AudioFeature.ACOUSTICNESS}"
                     android:valueFrom="@{settings.acousticness.lowerBound}"
-                    android:valueTo="@{settings.acousticness.lowerBound}"
+                    android:valueTo="@{settings.acousticness.upperBound}"
                     android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/acousticness_label"
                     app:layout_constraintBottom_toTopOf="@+id/danceability_label"/>

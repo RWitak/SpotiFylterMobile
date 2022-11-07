@@ -45,10 +45,8 @@ class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
             SPEECHINESS -> speechiness
             VALENCE -> valence
         }
-    }
 
-    companion object {
-        fun settingOf(audioFeature: AudioFeature): AudioFeatureSetting =
+        private fun settingOf(audioFeature: AudioFeature): AudioFeatureSetting =
             AudioFeatureSetting(QuantizedAudioFeature.of(audioFeature))
     }
 }

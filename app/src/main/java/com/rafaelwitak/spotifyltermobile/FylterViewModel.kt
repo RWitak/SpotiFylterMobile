@@ -30,7 +30,7 @@ class FylterViewModel(application: Application) :
             viewModelScope.launch { skipIfNotMatching() }
         }
 
-//    private fun hasInternet(): Boolean {
+    //    private fun hasInternet(): Boolean {
 //        val connectivityManager: ConnectivityManager =
 //            app.getSystemService(
 //                ConnectivityManager::class.java
@@ -62,7 +62,7 @@ class FylterViewModel(application: Application) :
                         Log.i("com.adamratzman.spotify", it.toString())
                     }
                 }
-        }
+            }
         onSkipped(false)
     }
 
@@ -81,20 +81,16 @@ class FylterViewModel(application: Application) :
     fun sliderTouchStop(slider: RangeSlider) {
         // FIXME: casting tag is ugly, extend RangeSlider to bind proper audioFeature
         val audioFeature = slider.tag as AudioFeature
-        val setting = featureSettings.getBoundsFor(audioFeature)
         val values = slider.values
 
         // FIXME: assert is ugly, extend RangeSlider to provide values better
         assert(values.size == 2)
-        setting.lowerBound = values[0]
-        setting.upperBound = values[1]
 
-        viewModelScope.launch {
-            notifyBoundsChanged(
-                AudioFeatureSetting.settingOf(
-                    slider.tag as AudioFeature
-                )
-            )
+        val featureSetting = featureSettings.getBoundsFor(audioFeature).apply {
+            lowerBound = values[0]
+            upperBound = values[1]
         }
+
+        viewModelScope.launch { notifyBoundsChanged(featureSetting) }
     }
 }
