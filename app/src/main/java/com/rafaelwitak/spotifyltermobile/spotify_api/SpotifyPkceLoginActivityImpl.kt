@@ -6,7 +6,7 @@ import com.adamratzman.spotify.SpotifyClientApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.auth.pkce.AbstractSpotifyPkceLoginActivity
 import com.rafaelwitak.spotifyltermobile.BuildConfig
-import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication
+import com.rafaelwitak.spotifyltermobile.Model
 import com.rafaelwitak.spotifyltermobile.gui.MainActivity
 import com.rafaelwitak.spotifyltermobile.util.toast
 
@@ -18,8 +18,7 @@ class SpotifyPkceLoginActivityImpl : AbstractSpotifyPkceLoginActivity() {
     override val scopes = SpotifyScope.values().toList()
 
     override fun onSuccess(api: SpotifyClientApi) {
-        val model = (application as SpotiFylterApplication).model
-        model.credentialStore.setSpotifyApi(api)
+        Model.credentialStore.setSpotifyApi(api)
         val classBackTo = pkceClassBackTo ?: MainActivity::class.java
         pkceClassBackTo = null
         toast("Authentication via PKCE has completed. Launching ${classBackTo.simpleName}..")

@@ -1,6 +1,8 @@
 package com.rafaelwitak.spotifyltermobile
 
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore
+import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
+import com.rafaelwitak.spotifyltermobile.spotify_api.MetadataBroadcastReceiver
 import com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting
 
 object Model {
@@ -14,4 +16,6 @@ object Model {
         )
     }
 
+    fun getMetadataBroadcastReceiver(onChanged: (SpotifyMetadataChangedData) -> Unit = {}) =
+        MetadataBroadcastReceiver(onChanged)
 }

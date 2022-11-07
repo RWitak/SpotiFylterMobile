@@ -15,21 +15,22 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = "Specify Audio Features"
+        registerSpotifyBroadcastReceiver(
+            vm.metadataBroadcastReceiver,
+            SpotifyBroadcastType.MetadataChanged
+        )
+
         binding = ActivityMainBinding.inflate(layoutInflater)
             .apply { setContentView(root) }
 
         binding.settings = vm.featureSettings
         setUpSliders()
-        registerSpotifyBroadcastReceiver(vm.spotifyBroadcastReceiver, SpotifyBroadcastType.MetadataChanged)
     }
 
     private fun setUpSliders() {
-        class OnSliderTouchListener :
-            RangeSlider.OnSliderTouchListener {
-
-            override fun onStartTrackingTouch(slider: RangeSlider) {
+        class OnSliderTouchListener : RangeSlider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) =
                 vm.sliderTouchStart(slider)
-            }
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 vm.sliderTouchStop(slider)

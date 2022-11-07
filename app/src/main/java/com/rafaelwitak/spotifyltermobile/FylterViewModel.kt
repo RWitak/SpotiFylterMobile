@@ -4,8 +4,6 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.adamratzman.spotify.notifications.AbstractSpotifyBroadcastReceiver
-import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
 import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
 import com.rafaelwitak.spotifyltermobile.util.AudioFeature
@@ -15,25 +13,22 @@ import kotlinx.coroutines.launch
 
 class FylterViewModel(application: Application) :
     AndroidViewModel(application) {
-    private val model = Model
-    private val api =
-        model.credentialStore.getSpotifyClientPkceApi { }
-    private val player = api?.player
+    private val api by lazy {
+        Model.credentialStore.getSpotifyClientPkceApi { }
+    }
+    private val player by lazy { api?.player }
     private val app: Application
         get() = getApplication()
 
-    val featureSettings = model.featureSettings
-    val spotifyBroadcastReceiver = object : AbstractSpotifyBroadcastReceiver() {
-        override fun onMetadataChanged(data: SpotifyMetadataChangedData) {
-            super.onMetadataChanged(data)
-            this@FylterViewModel.onMetadataChanged(data)
+    val featureSettings = Model.featureSettings
+    val metadataBroadcastReceiver =
+        Model.getMetadataBroadcastReceiver { metadataChangedData ->
+            Log.i(
+                "com.adamratzman.spotify",
+                "Spotify Metadata changed: $metadataChangedData"
+            )
+            viewModelScope.launch { skipIfNotMatching() }
         }
-    }
-
-    fun onMetadataChanged(data: SpotifyMetadataChangedData) {
-        Log.i("com.adamratzman.spotify", "Spotify Metadata changed: $data")
-        viewModelScope.launch { skipIfNotMatching() }
-    }
 
 //    private fun hasInternet(): Boolean {
 //        val connectivityManager: ConnectivityManager =
