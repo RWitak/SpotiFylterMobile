@@ -1,13 +1,14 @@
-package com.rafaelwitak.spotifyltermobile
+package com.rafaelwitak.spotifyltermobile.gui
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.slider.RangeSlider
+import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
-import com.rafaelwitak.spotifyltermobile.util.AudioFeature
-import com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting
+import com.rafaelwitak.spotifyltermobile.model.AudioFeature
+import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.util.toast
 import kotlinx.coroutines.launch
 

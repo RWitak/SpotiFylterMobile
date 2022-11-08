@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.adamratzman.spotify.notifications.SpotifyBroadcastType
 import com.adamratzman.spotify.notifications.registerSpotifyBroadcastReceiver
 import com.google.android.material.slider.RangeSlider
-import com.rafaelwitak.spotifyltermobile.FylterViewModel
 import com.rafaelwitak.spotifyltermobile.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

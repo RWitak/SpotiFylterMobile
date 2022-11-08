@@ -6,7 +6,7 @@ import com.adamratzman.spotify.SpotifyClientApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.auth.pkce.AbstractSpotifyPkceLoginActivity
 import com.rafaelwitak.spotifyltermobile.BuildConfig
-import com.rafaelwitak.spotifyltermobile.Model
+import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.gui.MainActivity
 import com.rafaelwitak.spotifyltermobile.util.toast
 

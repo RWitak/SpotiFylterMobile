@@ -1,9 +1,9 @@
 package com.rafaelwitak.spotifyltermobile.spotify_api
 
 import com.adamratzman.spotify.models.AudioFeatures
-import com.rafaelwitak.spotifyltermobile.util.AudioFeature
-import com.rafaelwitak.spotifyltermobile.util.AudioFeature.*
-import com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting
+import com.rafaelwitak.spotifyltermobile.model.AudioFeature
+import com.rafaelwitak.spotifyltermobile.model.AudioFeature.*
+import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 
 fun AudioFeatures.get(featureName: AudioFeature): Float =
     when (featureName) {

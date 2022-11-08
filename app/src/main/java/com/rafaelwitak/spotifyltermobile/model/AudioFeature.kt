@@ -1,4 +1,4 @@
-package com.rafaelwitak.spotifyltermobile.util
+package com.rafaelwitak.spotifyltermobile.model
 
 import java.util.*
 

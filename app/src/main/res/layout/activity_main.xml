@@ -7,11 +7,11 @@
         tools:context=".gui.MainActivity">
 
     <data>
-        <import type="com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting.Collection"/>
-        <import type="com.rafaelwitak.spotifyltermobile.util.AudioFeature"/>
+        <import type="com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting"/>
+        <import type="com.rafaelwitak.spotifyltermobile.model.AudioFeature"/>
         <variable
                 name="settings"
-                type="com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting.Collection"/>
+                type="com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting.Collection"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

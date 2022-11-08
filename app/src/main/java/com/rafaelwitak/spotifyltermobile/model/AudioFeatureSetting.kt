@@ -1,6 +1,6 @@
-package com.rafaelwitak.spotifyltermobile.util
+package com.rafaelwitak.spotifyltermobile.model
 
-import com.rafaelwitak.spotifyltermobile.util.AudioFeature.*
+import com.rafaelwitak.spotifyltermobile.model.AudioFeature.*
 
 class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
     var lowerBound: Float = quantizedFeature.min

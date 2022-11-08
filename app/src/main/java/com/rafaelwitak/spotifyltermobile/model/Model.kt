@@ -1,9 +1,10 @@
-package com.rafaelwitak.spotifyltermobile
+package com.rafaelwitak.spotifyltermobile.model
 
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore
 import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
+import com.rafaelwitak.spotifyltermobile.BuildConfig
+import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication
 import com.rafaelwitak.spotifyltermobile.spotify_api.MetadataBroadcastReceiver
-import com.rafaelwitak.spotifyltermobile.util.AudioFeatureSetting
 
 object Model {
     val featureSettings = AudioFeatureSetting.Collection()

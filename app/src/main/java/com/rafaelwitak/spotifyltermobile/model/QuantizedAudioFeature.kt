@@ -1,4 +1,4 @@
-package com.rafaelwitak.spotifyltermobile.util
+package com.rafaelwitak.spotifyltermobile.model
 
 enum class QuantizedAudioFeature(
     val feature: AudioFeature, val min: Float, val max: Float

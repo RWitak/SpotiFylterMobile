@@ -6,7 +6,7 @@ import com.adamratzman.spotify.SpotifyException
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore
 import com.adamratzman.spotify.auth.implicit.startSpotifyImplicitLoginActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
-import com.rafaelwitak.spotifyltermobile.Model
+import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.SpotifyImplicitLoginActivityImpl
 import com.rafaelwitak.spotifyltermobile.spotify_api.SpotifyPkceLoginActivityImpl
 import com.rafaelwitak.spotifyltermobile.spotify_api.pkceClassBackTo
