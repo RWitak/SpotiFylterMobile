@@ -5,8 +5,8 @@ import com.adamratzman.spotify.SpotifyImplicitGrantApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.auth.implicit.AbstractSpotifyAppImplicitLoginActivity
 import com.rafaelwitak.spotifyltermobile.BuildConfig
-import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication
 import com.rafaelwitak.spotifyltermobile.gui.MainActivity
+import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.util.toast
 
 class SpotifyImplicitLoginActivityImpl :
@@ -19,8 +19,7 @@ class SpotifyImplicitLoginActivityImpl :
         SpotifyScope.values().toList()
 
     override fun onSuccess(spotifyApi: SpotifyImplicitGrantApi) {
-        val model = (application as SpotiFylterApplication).model
-        model.credentialStore.setSpotifyApi(spotifyApi)
+        Model.credentialStore.setSpotifyApi(spotifyApi)
         toast("Authentication successful!")
         startActivity(Intent(this, MainActivity::class.java))
     }

@@ -5,10 +5,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.slider.RangeSlider
-import com.rafaelwitak.spotifyltermobile.model.Model
-import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
+import com.rafaelwitak.spotifyltermobile.R
 import com.rafaelwitak.spotifyltermobile.model.AudioFeature
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
+import com.rafaelwitak.spotifyltermobile.model.Model
+import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
 import com.rafaelwitak.spotifyltermobile.util.toast
 import kotlinx.coroutines.launch
 
@@ -16,6 +17,7 @@ class FylterViewModel(application: Application) :
     AndroidViewModel(application) {
     private val api by lazy {
         Model.credentialStore.getSpotifyClientPkceApi { }
+            .also { app.toast(application.getString(R.string.api_connected)) }
     }
     private val player by lazy { api?.player }
     private val app: Application
