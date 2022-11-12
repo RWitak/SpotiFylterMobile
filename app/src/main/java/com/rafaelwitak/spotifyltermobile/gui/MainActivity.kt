@@ -39,7 +39,17 @@ class MainActivity : AppCompatActivity() {
                 vm.sliderTouchStop(slider as FeatureSlider)
         }
 
-        val sliders = with(binding) {
+        getFeatureSliders().forEach { featureSlider ->
+            featureSlider.values =
+                mutableListOf(featureSlider.valueFrom, featureSlider.valueTo)
+            featureSlider.addOnSliderTouchListener(
+                OnSliderTouchListener()
+            )
+        }
+    }
+
+    private fun getFeatureSliders() =
+        with(binding) {
             listOf(
                 acousticnessSlider,
                 danceabilitySlider,
@@ -50,13 +60,4 @@ class MainActivity : AppCompatActivity() {
                 valenceSlider,
             )
         }
-
-        sliders.forEach { featureSlider ->
-            featureSlider.values =
-                mutableListOf(featureSlider.valueFrom, featureSlider.valueTo)
-            featureSlider.addOnSliderTouchListener(
-                OnSliderTouchListener()
-            )
-        }
-    }
 }

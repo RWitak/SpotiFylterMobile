@@ -1,7 +1,5 @@
 package com.rafaelwitak.spotifyltermobile.model
 
-import java.util.*
-
 enum class AudioFeature {
     ACOUSTICNESS,
     DANCEABILITY,
@@ -11,9 +9,6 @@ enum class AudioFeature {
     SPEECHINESS,
     VALENCE;
 
-    override fun toString(): String {
-        val name = super.toString()
-        return name[0].toString() + name.substring(1)
-            .lowercase(Locale.getDefault())
-    }
+    override fun toString() =
+        super.toString().lowercase().replaceFirstChar(Char::uppercase)
 }
