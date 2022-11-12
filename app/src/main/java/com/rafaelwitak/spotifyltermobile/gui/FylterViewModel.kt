@@ -9,7 +9,9 @@ import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
 import com.rafaelwitak.spotifyltermobile.util.toast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FylterViewModel(application: Application) :
     AndroidViewModel(application) {
@@ -44,36 +46,37 @@ class FylterViewModel(application: Application) :
 //    }
 
     private suspend fun notifyBoundsChanged(featureSetting: AudioFeatureSetting) {
-        Log.i(
-            "Bounds",
-            featureSetting.quantizedFeature.feature.toString() + ": "
-                    + featureSetting.lowerBound + "-"
-                    + featureSetting.upperBound
-        )
+        logFeatureBounds(featureSetting)
         skipIfNotMatching()
     }
 
-    private suspend fun skipIfNotMatching(onSkipped: (Boolean) -> Unit = {}) {
-        getAudioFeatures(getCurrentTrackId())
-            ?.let { features ->
-                if (!features.allowedBy(featureSettings)) {
-                    player?.skipForward().also {
-                        onSkipped(true)
-                        app.toast("Track skipped")
-                        Log.i("com.adamratzman.spotify", it.toString())
+    private suspend fun skipIfNotMatching(onSkipped: (Boolean) -> Unit = {}) =
+        withContext(Dispatchers.IO) {
+            getAudioFeatures(getCurrentTrackId())
+                ?.let { features ->
+                    if (!features.allowedBy(featureSettings)) {
+                        player?.skipForward().also {
+                            onSkipped(true)
+                            app.toast("Track skipped")
+                            Log.i("com.adamratzman.spotify", it.toString())
+                        }
                     }
                 }
-            }
-        onSkipped(false)
-    }
-
-    private suspend fun getAudioFeatures(id: String?) =
-        id?.let {
-            api?.tracks?.getAudioFeatures(id)
+            onSkipped(false)
         }
 
-    private suspend fun getCurrentTrackId() = player?.getCurrentlyPlaying()
-        ?.item?.asTrack?.id
+    private suspend fun getAudioFeatures(id: String?) =
+        withContext(Dispatchers.IO) {
+            id?.let {
+                api?.tracks?.getAudioFeatures(id)
+            }
+        }
+
+    private suspend fun getCurrentTrackId() =
+        withContext(Dispatchers.IO) {
+            player?.getCurrentlyPlaying()
+                ?.item?.asTrack?.id
+        }
 
     fun sliderTouchStart(@Suppress("UNUSED_PARAMETER") slider: FeatureSlider) {
         viewModelScope.launch { player?.pause() }
@@ -86,6 +89,16 @@ class FylterViewModel(application: Application) :
                 upperBound = values.max()
             }
         }
+
         viewModelScope.launch { notifyBoundsChanged(featureSetting) }
     }
+
+    private fun logFeatureBounds(featureSetting: AudioFeatureSetting) =
+        with(featureSetting) {
+            val feature = quantizedFeature.feature.toString()
+            Log.i(
+                "Bounds",
+                "$feature: $lowerBound-$upperBound"
+            )
+        }
 }
