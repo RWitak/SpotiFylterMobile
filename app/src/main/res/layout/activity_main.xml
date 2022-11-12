@@ -53,11 +53,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.AcousticnessSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/acousticness_slider"
-                    android:tag="@{AudioFeature.ACOUSTICNESS}"
                     android:valueFrom="@{settings.acousticness.lowerBound}"
                     android:valueTo="@{settings.acousticness.upperBound}"
                     android:stepSize="0.01"
@@ -78,11 +77,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.DanceabilitySlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/danceability_slider"
-                    android:tag="@{AudioFeature.DANCEABILITY}"
                     android:valueFrom="@{settings.danceability.lowerBound}"
                     android:valueTo="@{settings.danceability.upperBound}"
                     android:stepSize="0.01"
@@ -102,11 +100,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.EnergySlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/energy_slider"
-                    android:tag="@{AudioFeature.ENERGY}"
                     android:valueFrom="@{settings.energy.lowerBound}"
                     android:valueTo="@{settings.energy.upperBound}"
                     android:stepSize="0.01"
@@ -126,11 +123,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.InstrumentalnessSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/instrumentalness_slider"
-                    android:tag="@{AudioFeature.INSTRUMENTALNESS}"
                     android:valueFrom="@{settings.instrumentalness.lowerBound}"
                     android:valueTo="@{settings.instrumentalness.upperBound}"
                     android:stepSize="0.01"
@@ -150,11 +146,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.LivenessSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/liveness_slider"
-                    android:tag="@{AudioFeature.LIVENESS}"
                     android:valueFrom="@{settings.liveness.lowerBound}"
                     android:valueTo="@{settings.liveness.upperBound}"
                     android:stepSize="0.01"
@@ -174,11 +169,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.SpeechinessSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/speechiness_slider"
-                    android:tag="@{AudioFeature.SPEECHINESS}"
                     android:valueFrom="@{settings.speechiness.lowerBound}"
                     android:valueTo="@{settings.speechiness.upperBound}"
                     android:stepSize="0.01"
@@ -198,11 +192,10 @@
                     android:textColor="@color/light"
                     android:fontFamily="sans-serif-medium"/>
 
-            <com.google.android.material.slider.RangeSlider
+            <view class="com.rafaelwitak.spotifyltermobile.gui.ValenceSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/valence_slider"
-                    android:tag="@{AudioFeature.VALENCE}"
                     android:valueFrom="@{settings.valence.lowerBound}"
                     android:valueTo="@{settings.valence.upperBound}"
                     android:stepSize="0.01"

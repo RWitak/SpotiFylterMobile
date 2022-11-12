@@ -4,9 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.R
-import com.rafaelwitak.spotifyltermobile.model.AudioFeature
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
@@ -77,23 +75,17 @@ class FylterViewModel(application: Application) :
     private suspend fun getCurrentTrackId() = player?.getCurrentlyPlaying()
         ?.item?.asTrack?.id
 
-    fun sliderTouchStart(@Suppress("UNUSED_PARAMETER") slider: RangeSlider) {
+    fun sliderTouchStart(@Suppress("UNUSED_PARAMETER") slider: FeatureSlider) {
         viewModelScope.launch { player?.pause() }
     }
 
-    fun sliderTouchStop(slider: RangeSlider) {
-        // FIXME: casting tag is ugly, extend RangeSlider to bind proper audioFeature
-        val audioFeature = slider.tag as AudioFeature
-        val values = slider.values
-
-        // FIXME: assert is ugly, extend RangeSlider to provide values better
-        assert(values.size == 2)
-
-        val featureSetting = featureSettings.getBoundsFor(audioFeature).apply {
-            lowerBound = values[0]
-            upperBound = values[1]
+    fun sliderTouchStop(slider: FeatureSlider) {
+        val featureSetting = with(slider) {
+            featureSettings.getBoundsFor(audioFeature).apply {
+                lowerBound = values.min()
+                upperBound = values.max()
+            }
         }
-
         viewModelScope.launch { notifyBoundsChanged(featureSetting) }
     }
 }

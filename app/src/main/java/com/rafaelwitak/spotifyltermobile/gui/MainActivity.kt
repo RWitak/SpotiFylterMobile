@@ -33,10 +33,10 @@ class MainActivity : AppCompatActivity() {
     private fun setUpSliders() {
         class OnSliderTouchListener : RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) =
-                vm.sliderTouchStart(slider)
+                vm.sliderTouchStart(slider as FeatureSlider)
 
             override fun onStopTrackingTouch(slider: RangeSlider) =
-                vm.sliderTouchStop(slider)
+                vm.sliderTouchStop(slider as FeatureSlider)
         }
 
         val sliders = with(binding) {
@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        sliders.forEach { rangeSlider ->
-            rangeSlider.values =
-                mutableListOf(rangeSlider.valueFrom, rangeSlider.valueTo)
-            rangeSlider.addOnSliderTouchListener(
+        sliders.forEach { featureSlider ->
+            featureSlider.values =
+                mutableListOf(featureSlider.valueFrom, featureSlider.valueTo)
+            featureSlider.addOnSliderTouchListener(
                 OnSliderTouchListener()
             )
         }
