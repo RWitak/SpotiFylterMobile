@@ -101,4 +101,3 @@ class ValenceSlider : FeatureSlider {
         defStyleAttr: Int
     ) : super(context, attrs, defStyleAttr)
 }
-

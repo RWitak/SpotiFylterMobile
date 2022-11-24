@@ -4,24 +4,44 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.rafaelwitak.spotifyltermobile.R
+import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.allowedBy
+import com.rafaelwitak.spotifyltermobile.util.LoginState
+import com.rafaelwitak.spotifyltermobile.util.NetConnectCallbackImpl
+import com.rafaelwitak.spotifyltermobile.util.TAG
 import com.rafaelwitak.spotifyltermobile.util.toast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FylterViewModel(application: Application) :
     AndroidViewModel(application) {
-    private val api by lazy {
-        Model.credentialStore.getSpotifyClientPkceApi { }
-            .also { app.toast(application.getString(R.string.api_connected)) }
+    private val _loginState: MutableStateFlow<LoginState> =
+        MutableStateFlow(LoginState.Checking(hasInternet = false))
+    val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
+
+    private fun MutableStateFlow<LoginState>.transform(stateTransform: (LoginState) -> LoginState) {
+        viewModelScope.launch { getAndUpdate(stateTransform) }
     }
+
+    private val api by lazy {
+        Model.credentialStore.getSpotifyClientPkceApi {
+            // TODO: Disable in production
+            enableLogger = true
+            enableDebugMode = true
+        }?.also {
+            application.toast("Api created successfully!")
+            _loginState.transform { LoginState.Connected(it.hasInternet) }
+        }
+    }
+
     private val player by lazy { api?.player }
-    private val app: Application
-        get() = getApplication()
 
     val featureSettings = Model.featureSettings
     val metadataBroadcastReceiver =
@@ -33,17 +53,27 @@ class FylterViewModel(application: Application) :
             viewModelScope.launch { skipIfNotMatching() }
         }
 
-    //    private fun hasInternet(): Boolean {
-//        val connectivityManager: ConnectivityManager =
-//            app.getSystemService(
-//                ConnectivityManager::class.java
-//            )
-//        val activeNetwork: Network? = connectivityManager.activeNetwork
-//        val capabilities: NetworkCapabilities? =
-//            connectivityManager.getNetworkCapabilities(activeNetwork)
-//        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-//            ?: false
-//    }
+
+    init {
+        observeNetworkConnection(application)
+    }
+
+    private fun observeNetworkConnection(application: Application) {
+        NetConnectCallbackImpl(
+            application = application,
+            onConnected = {
+                _loginState.transform { state ->
+                    state.copyWith(hasInternet = true)
+                }
+            },
+            onDisconnected = {
+                _loginState.transform { state ->
+                    state.copyWith(hasInternet = false)
+                }
+            }
+        ).activate()
+    }
+
 
     private suspend fun notifyBoundsChanged(featureSetting: AudioFeatureSetting) {
         logFeatureBounds(featureSetting)
@@ -52,16 +82,18 @@ class FylterViewModel(application: Application) :
 
     private suspend fun skipIfNotMatching(onSkipped: (Boolean) -> Unit = {}) =
         withContext(Dispatchers.IO) {
-            getAudioFeatures(getCurrentTrackId())
-                ?.let { features ->
-                    if (!features.allowedBy(featureSettings)) {
-                        player?.skipForward().also {
-                            onSkipped(true)
-                            app.toast("Track skipped")
-                            Log.i("com.adamratzman.spotify", it.toString())
-                        }
-                    }
+            getAudioFeatures(getCurrentTrackId())?.let { features ->
+                Log.i(TAG, features.toString())
+                if (features.allowedBy(featureSettings)) {
+                    return@let
                 }
+                player?.skipForward().also {
+                    getApplication<SpotiFylterApplication>()
+                        .toast("Track skipped")
+                    Log.i("com.adamratzman.spotify", it.toString())
+                    onSkipped(true)
+                } ?: Log.e(TAG, "No player")
+            }
             onSkipped(false)
         }
 
@@ -97,7 +129,7 @@ class FylterViewModel(application: Application) :
         with(featureSetting) {
             val feature = quantizedFeature.feature.toString()
             Log.i(
-                "Bounds",
+                "$TAG: Bounds",
                 "$feature: $lowerBound-$upperBound"
             )
         }

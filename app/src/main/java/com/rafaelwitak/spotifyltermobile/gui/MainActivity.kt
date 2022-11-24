@@ -3,10 +3,16 @@ package com.rafaelwitak.spotifyltermobile.gui
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.adamratzman.spotify.notifications.SpotifyBroadcastType
 import com.adamratzman.spotify.notifications.registerSpotifyBroadcastReceiver
 import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.databinding.ActivityMainBinding
+import com.rafaelwitak.spotifyltermobile.util.LoginState
+import com.rafaelwitak.spotifyltermobile.util.toast
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +27,8 @@ class MainActivity : AppCompatActivity() {
             SpotifyBroadcastType.MetadataChanged
         )
 
+        observeLoginState()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
             .apply {
                 setContentView(root)
@@ -28,6 +36,32 @@ class MainActivity : AppCompatActivity() {
             }
 
         setUpSliders()
+    }
+
+    private fun observeLoginState() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.loginState.collect(::handleLoginState)
+            }
+        }
+
+    }
+
+    private fun onReady() {
+        // TODO: clear screen and display main interface
+    }
+
+    private fun handleLoginState(loginState: LoginState) {
+        if (!loginState.hasInternet) {
+            toast("No internet connection")
+            return
+        }
+        when (loginState) {
+            is LoginState.AuthFailed -> toast("Authentication failed")
+            is LoginState.Checking -> toast("Checking...")
+            is LoginState.Connected -> onReady().also { toast("Connected") }
+            is LoginState.NotInstalled -> toast("Spotify not installed")
+        }
     }
 
     private fun setUpSliders() {
@@ -39,17 +73,21 @@ class MainActivity : AppCompatActivity() {
                 vm.sliderTouchStop(slider as FeatureSlider)
         }
 
-        getFeatureSliders().forEach { featureSlider ->
+        featureSliders.forEach { featureSlider ->
             featureSlider.values =
-                mutableListOf(featureSlider.valueFrom, featureSlider.valueTo)
+                mutableListOf(
+                    // FIXME: Config changes set sliders' max ranges to current bounds
+                    featureSlider.valueFrom,
+                    featureSlider.valueTo
+                )
             featureSlider.addOnSliderTouchListener(
                 OnSliderTouchListener()
             )
         }
     }
 
-    private fun getFeatureSliders() =
-        with(binding) {
+    private val featureSliders
+        get() = with(binding) {
             listOf(
                 acousticnessSlider,
                 danceabilitySlider,

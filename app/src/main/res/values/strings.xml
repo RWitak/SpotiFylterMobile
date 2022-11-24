@@ -9,4 +9,5 @@
     <string name="attr_valence">Valence</string>
     <string name="api_connected">Spotify API successfully connected.</string>
     <string name="attribution">Made possible by</string>
+    <string name="no_internet">No Internet Connection!</string>
 </resources>
