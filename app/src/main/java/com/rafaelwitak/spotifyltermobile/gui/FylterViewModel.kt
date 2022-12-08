@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.rafaelwitak.spotifyltermobile.model.AudioFeature
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.ApiCall
@@ -90,21 +91,12 @@ class FylterViewModel(application: Application) :
             }
         }
 
-    // TODO: Accept min/max directly instead of Slider
-    fun sliderTouchStart(
-        @Suppress("UNUSED_PARAMETER") slider: FeatureSlider
-    ) {
-        viewModelScope.launch { tryWithPlayer { pause() } }
-    }
-
-    // TODO: Accept min/max directly instead of Slider
-    fun sliderTouchStop(slider: FeatureSlider) {
-        val featureSetting = with(slider) {
+    fun editBounds(audioFeature: AudioFeature, lower: Float, upper: Float) {
+        val featureSetting =
             Model.featureSettings.getBoundsFor(audioFeature).apply {
-                lowerBound = values.min()
-                upperBound = values.max()
+                lowerBound = lower
+                upperBound = upper
             }
-        }
         viewModelScope.launch { notifyBoundsChanged(featureSetting) }
     }
 

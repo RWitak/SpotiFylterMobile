@@ -16,6 +16,25 @@ sealed class FeatureSlider : RangeSlider {
         attrs: AttributeSet?,
         defStyleAttr: Int
     ) : super(context, attrs, defStyleAttr)
+
+    fun resetRange() {
+        values = mutableListOf(valueFrom, valueTo)
+    }
+
+    fun addOnTouchListener(
+        onStart: (FeatureSlider) -> Unit = {},
+        onStop: (FeatureSlider) -> Unit = {}
+    ) {
+        addOnSliderTouchListener(object : OnTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) =
+                onStart(slider as FeatureSlider)
+
+            override fun onStopTrackingTouch(slider: RangeSlider) =
+                onStop(slider as FeatureSlider)
+        })
+    }
+
+    interface OnTouchListener : OnSliderTouchListener
 }
 
 class AcousticnessSlider : FeatureSlider {

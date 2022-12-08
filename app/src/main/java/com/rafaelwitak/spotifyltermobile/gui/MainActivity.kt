@@ -7,11 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.adamratzman.spotify.auth.pkce.startSpotifyClientPkceLoginActivity
 import com.adamratzman.spotify.notifications.SpotifyBroadcastType
 import com.adamratzman.spotify.notifications.registerSpotifyBroadcastReceiver
-import com.google.android.material.slider.RangeSlider
 import com.rafaelwitak.spotifyltermobile.databinding.ActivityMainBinding
 import com.rafaelwitak.spotifyltermobile.model.Model
 import com.rafaelwitak.spotifyltermobile.spotify_api.SpotifyPkceLoginActivityImpl
 import com.rafaelwitak.spotifyltermobile.spotify_api.pkceClassBackTo
+
+private fun ActivityMainBinding.getFeatureSliders() =
+    listOf(
+        acousticnessSlider,
+        danceabilitySlider,
+        energySlider,
+        instrumentalnessSlider,
+        livenessSlider,
+        speechinessSlider,
+        valenceSlider,
+    )
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -48,33 +58,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpSliders() {
-        class OnSliderTouchListener : RangeSlider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: RangeSlider) =
-                vm.sliderTouchStart(slider as FeatureSlider)
+        fun FeatureSlider.propagateBounds() =
+            vm.editBounds(audioFeature, values.min(), values.max())
 
-            override fun onStopTrackingTouch(slider: RangeSlider) =
-                vm.sliderTouchStop(slider as FeatureSlider)
-        }
-
-        getFeatureSliders().forEach { featureSlider ->
-            featureSlider.values =
-                mutableListOf(featureSlider.valueFrom, featureSlider.valueTo)
-            featureSlider.addOnSliderTouchListener(
-                OnSliderTouchListener()
-            )
+        binding.getFeatureSliders().forEach { slider ->
+            slider.resetRange()
+            slider.addOnTouchListener(onStop = FeatureSlider::propagateBounds)
         }
     }
-
-    private fun getFeatureSliders() =
-        with(binding) {
-            listOf(
-                acousticnessSlider,
-                danceabilitySlider,
-                energySlider,
-                instrumentalnessSlider,
-                livenessSlider,
-                speechinessSlider,
-                valenceSlider,
-            )
-        }
 }
