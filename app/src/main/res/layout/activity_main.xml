@@ -7,16 +7,6 @@
         tools:context=".gui.MainActivity"
         android:fitsSystemWindows="true">
 
-    <data>
-
-        <import type="com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting"/>
-
-        <import type="com.rafaelwitak.spotifyltermobile.model.AudioFeature"/>
-
-        <variable
-                name="settings"
-                type="com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting.Collection"/>
-    </data>
 <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,9 +47,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/acousticness_slider"
-                    android:valueFrom="@{settings.acousticness.lowerBound}"
-                    android:valueTo="@{settings.acousticness.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/acousticness_label"
                     app:layout_constraintBottom_toTopOf="@+id/danceability_label"
                     tools:layout_editor_absoluteX="48dp"/>
@@ -81,9 +68,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/danceability_slider"
-                    android:valueFrom="@{settings.danceability.lowerBound}"
-                    android:valueTo="@{settings.danceability.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/danceability_label"
                     app:layout_constraintBottom_toTopOf="@+id/energy_label"/>
 
@@ -104,9 +88,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/energy_slider"
-                    android:valueFrom="@{settings.energy.lowerBound}"
-                    android:valueTo="@{settings.energy.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/energy_label"
                     app:layout_constraintBottom_toTopOf="@+id/instrumentalness_label"/>
 
@@ -127,9 +108,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/instrumentalness_slider"
-                    android:valueFrom="@{settings.instrumentalness.lowerBound}"
-                    android:valueTo="@{settings.instrumentalness.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/instrumentalness_label"
                     app:layout_constraintBottom_toTopOf="@+id/liveness_label"/>
 
@@ -150,9 +128,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/liveness_slider"
-                    android:valueFrom="@{settings.liveness.lowerBound}"
-                    android:valueTo="@{settings.liveness.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/liveness_label"
                     app:layout_constraintBottom_toTopOf="@+id/speechiness_label"/>
 
@@ -173,9 +148,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/speechiness_slider"
-                    android:valueFrom="@{settings.speechiness.lowerBound}"
-                    android:valueTo="@{settings.speechiness.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/speechiness_label"
                     app:layout_constraintBottom_toTopOf="@+id/valence_label"/>
 
@@ -196,9 +168,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/valence_slider"
-                    android:valueFrom="@{settings.valence.lowerBound}"
-                    android:valueTo="@{settings.valence.upperBound}"
-                    android:stepSize="0.01"
                     app:layout_constraintTop_toBottomOf="@+id/valence_label"
                     tools:layout_editor_absoluteX="16dp"/>
 

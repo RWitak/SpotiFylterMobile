@@ -40,10 +40,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-            .apply {
-                setContentView(root)
-                settings = Model.featureSettings
-            }
+            .apply { setContentView(root) }
 
         setUpSliders()
     }
