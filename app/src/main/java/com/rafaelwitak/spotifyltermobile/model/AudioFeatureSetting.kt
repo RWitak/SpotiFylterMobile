@@ -46,6 +46,16 @@ class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
             VALENCE -> valence
         }
 
+        override fun toString(): String {
+            return "$acousticness, " +
+                    "$danceability, " +
+                    "$energy, " +
+                    "$instrumentalness, " +
+                    "$liveness, " +
+                    "$speechiness, " +
+                    "$valence"
+        }
+
         private fun settingOf(audioFeature: AudioFeature): AudioFeatureSetting =
             AudioFeatureSetting(QuantizedAudioFeature.of(audioFeature))
     }

@@ -9,4 +9,8 @@
     <string name="attr_valence">Valence</string>
     <string name="api_connected">Spotify API successfully connected.</string>
     <string name="attribution">Made possible by</string>
+    <string name="skipped_with_reason">Skipped. (%1$s)</string>
+    <string name="track_mismatch_new_bounds">New bounds don\'t match track.</string>
+    <string name="track_match_new_bounds">Current track matches new bounds.</string>
+    <string name="no_playback">No playback detected.</string>
 </resources>
