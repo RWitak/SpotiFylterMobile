@@ -1,8 +1,10 @@
 package com.rafaelwitak.spotifyltermobile.model
 
+import com.adamratzman.spotify.models.AudioFeatures
 import com.rafaelwitak.spotifyltermobile.model.AudioFeature.*
+import com.rafaelwitak.spotifyltermobile.spotify_api.get
 
-class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
+class AudioFeatureSetting(private val quantizedFeature: QuantizedAudioFeature) {
     var lowerBound: Float = quantizedFeature.min
         set(value) {
             require(lowerBound >= quantizedFeature.min) {
@@ -14,11 +16,16 @@ class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
     var upperBound: Float = quantizedFeature.max
         set(value) {
             require(upperBound <= quantizedFeature.max) {
-                "Out of bounds!" +
+                "Out of bounds! " +
                         "Maximum: ${quantizedFeature.max}, Actual: $upperBound"
             }
             field = value
         }
+
+    override fun toString(): String {
+        val feature = quantizedFeature.feature.toString()
+        return "$feature: $lowerBound-$upperBound"
+    }
 
     init {
         lowerBound = quantizedFeature.min
@@ -58,5 +65,12 @@ class AudioFeatureSetting(val quantizedFeature: QuantizedAudioFeature) {
 
         private fun settingOf(audioFeature: AudioFeature): AudioFeatureSetting =
             AudioFeatureSetting(QuantizedAudioFeature.of(audioFeature))
+
+        fun allows(trackFeatures: AudioFeatures) =
+            AudioFeature.values().all { audioFeature ->
+                val feature = trackFeatures.get(audioFeature)
+                val bounds = getBoundsFor(audioFeature)
+                feature in bounds
+            }
     }
 }

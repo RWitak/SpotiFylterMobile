@@ -10,7 +10,10 @@ import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication.Companion.contex
 import com.rafaelwitak.spotifyltermobile.model.AudioFeature
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
-import com.rafaelwitak.spotifyltermobile.spotify_api.*
+import com.rafaelwitak.spotifyltermobile.spotify_api.ApiCall
+import com.rafaelwitak.spotifyltermobile.spotify_api.PlayerCall
+import com.rafaelwitak.spotifyltermobile.spotify_api.getMostRecentTrackId
+import com.rafaelwitak.spotifyltermobile.spotify_api.tryToRun
 import com.rafaelwitak.spotifyltermobile.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +43,7 @@ class FylterViewModel(application: Application) :
         tryWithApi { block(player) }
 
     private suspend fun notifyBoundsChanged(featureSetting: AudioFeatureSetting) {
-        logFeatureBounds(featureSetting)
+        Log.i("Bounds", featureSetting.toString())
         skipIfNotMatching { skip ->
             val msg = if (skip) {
                 val reason =
@@ -70,7 +73,7 @@ class FylterViewModel(application: Application) :
         val features = getAudioFeatures(
             getMostRecentTrackId(tryWithApi { player }, metadata)
         )
-        if (features == null || features.allowedBy(Model.featureSettings))
+        if (features == null || Model.featureSettings.allows(features))
             return onSkipAttempt(false)
 
         Log.d(
@@ -94,9 +97,7 @@ class FylterViewModel(application: Application) :
     private suspend fun getAudioFeatures(trackId: String?) =
         withContext(Dispatchers.IO) {
             trackId?.let {
-                tryWithApi {
-                    tracks.getAudioFeatures(trackId)
-                }
+                tryWithApi { tracks.getAudioFeatures(trackId) }
             }
         }
 
@@ -109,13 +110,4 @@ class FylterViewModel(application: Application) :
             }
         viewModelScope.launch { notifyBoundsChanged(featureSetting) }
     }
-
-    private fun logFeatureBounds(featureSetting: AudioFeatureSetting) =
-        with(featureSetting) {
-            val feature = quantizedFeature.feature.toString()
-            Log.i(
-                "Bounds",
-                "$feature: $lowerBound-$upperBound"
-            )
-        }
 }

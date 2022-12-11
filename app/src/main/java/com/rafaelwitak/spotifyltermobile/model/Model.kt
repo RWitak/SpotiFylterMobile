@@ -17,7 +17,6 @@ val REQUIRED_SCOPES = mutableListOf(
 )
 
 object Model {
-
     val featureSettings = AudioFeatureSetting.Collection()
 
     val credentialStore by lazy {
