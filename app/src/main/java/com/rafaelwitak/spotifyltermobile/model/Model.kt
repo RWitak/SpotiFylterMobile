@@ -4,9 +4,11 @@ import com.adamratzman.spotify.SpotifyClientApi
 import com.adamratzman.spotify.SpotifyScope
 import com.adamratzman.spotify.auth.SpotifyDefaultCredentialStore
 import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
+import com.adamratzman.spotify.notifications.SpotifyPlaybackStateChangedData
 import com.rafaelwitak.spotifyltermobile.BuildConfig
 import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication
 import com.rafaelwitak.spotifyltermobile.spotify_api.MetadataBroadcastReceiver
+import com.rafaelwitak.spotifyltermobile.spotify_api.PlaybackStateBroadcastReceiver
 
 val REQUIRED_SCOPES = mutableListOf(
     SpotifyScope.APP_REMOTE_CONTROL,
@@ -29,9 +31,14 @@ object Model {
 
     val api: SpotifyClientApi?
         get() = credentialStore.getSpotifyClientPkceApi {
-        requiredScopes = REQUIRED_SCOPES
-    }
+            requiredScopes = REQUIRED_SCOPES
+        }
 
-    fun getMetadataBroadcastReceiver(onChanged: (SpotifyMetadataChangedData) -> Unit = {}) =
-        MetadataBroadcastReceiver(onChanged)
+    fun getMetadataBroadcastReceiver(
+        onChanged: (SpotifyMetadataChangedData) -> Unit = {}
+    ) = MetadataBroadcastReceiver(onChanged)
+
+    fun getPlaybackStateBroadcastReceiver(
+        onChanged: (SpotifyPlaybackStateChangedData) -> Unit = {}
+    ) = PlaybackStateBroadcastReceiver(onChanged)
 }

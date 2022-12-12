@@ -5,15 +5,13 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.adamratzman.spotify.notifications.SpotifyMetadataChangedData
+import com.adamratzman.spotify.notifications.SpotifyPlaybackStateChangedData
 import com.rafaelwitak.spotifyltermobile.R
 import com.rafaelwitak.spotifyltermobile.SpotiFylterApplication.Companion.context
 import com.rafaelwitak.spotifyltermobile.model.AudioFeature
 import com.rafaelwitak.spotifyltermobile.model.AudioFeatureSetting
 import com.rafaelwitak.spotifyltermobile.model.Model
-import com.rafaelwitak.spotifyltermobile.spotify_api.ApiCall
-import com.rafaelwitak.spotifyltermobile.spotify_api.PlayerCall
-import com.rafaelwitak.spotifyltermobile.spotify_api.getMostRecentTrackId
-import com.rafaelwitak.spotifyltermobile.spotify_api.tryToRun
+import com.rafaelwitak.spotifyltermobile.spotify_api.*
 import com.rafaelwitak.spotifyltermobile.util.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,10 +28,22 @@ class FylterViewModel(application: Application) :
             Log.i("Metadata", "changed: $value")
         }
 
+    @Volatile
+    private var playbackState: SpotifyPlaybackStateChangedData? = null
+        set(value) {
+            field = value
+            Log.i("PlaybackState", "changed: $value")
+        }
+
     val metadataBroadcastReceiver =
         Model.getMetadataBroadcastReceiver {
             metadata = it
             viewModelScope.launch { skipIfNotMatching() }
+        }
+
+    val playbackStateBroadcastReceiver =
+        Model.getPlaybackStateBroadcastReceiver {
+            playbackState = it
         }
 
     private suspend fun <T> tryWithApi(block: ApiCall<T>): T? =
@@ -65,7 +75,7 @@ class FylterViewModel(application: Application) :
     private suspend fun skipIfNotMatching(
         onSkipAttempt: (wasSkipped: Boolean) -> Unit = {}
     ) {
-        if (!isPlaying()) {
+        if (isPlaying() != true) {
             app.toast(context.getString(R.string.no_playback))
             return onSkipAttempt(false)
         }
@@ -91,8 +101,7 @@ class FylterViewModel(application: Application) :
     }
 
     private suspend fun isPlaying() =
-        tryWithPlayer { getCurrentContext()?.isPlaying } == true
-    // TODO: Try using only broadcast (or both) for playback state
+        getMostRecentPlayingState(tryWithApi { player }, playbackState)
 
     private suspend fun getAudioFeatures(trackId: String?) =
         withContext(Dispatchers.IO) {

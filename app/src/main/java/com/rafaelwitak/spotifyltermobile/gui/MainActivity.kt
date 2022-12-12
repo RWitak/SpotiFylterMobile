@@ -33,16 +33,25 @@ class MainActivity : AppCompatActivity() {
 
         logInIfNecessary(this::class.java)
 
-        // Listen to changing Spotify Metadata
-        registerSpotifyBroadcastReceiver(
-            vm.metadataBroadcastReceiver,
-            SpotifyBroadcastType.MetadataChanged
-        )
+        registerBroadcastReceivers()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
             .apply { setContentView(root) }
 
         setUpSliders()
+    }
+
+    private fun registerBroadcastReceivers() {
+        // Listen to changing Spotify Metadata
+        registerSpotifyBroadcastReceiver(
+            vm.metadataBroadcastReceiver,
+            SpotifyBroadcastType.MetadataChanged
+        )
+        // Listen to changing PlaybackState
+        registerSpotifyBroadcastReceiver(
+            vm.playbackStateBroadcastReceiver,
+            SpotifyBroadcastType.PlaybackStateChanged
+        )
     }
 
     private fun logInIfNecessary(activityClass: Class<out Activity>) {
