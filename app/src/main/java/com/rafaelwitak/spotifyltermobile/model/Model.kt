@@ -11,11 +11,11 @@ import com.rafaelwitak.spotifyltermobile.spotify_api.MetadataBroadcastReceiver
 import com.rafaelwitak.spotifyltermobile.spotify_api.PlaybackStateBroadcastReceiver
 
 val REQUIRED_SCOPES = mutableListOf(
-    SpotifyScope.APP_REMOTE_CONTROL,
-    SpotifyScope.STREAMING,
-    SpotifyScope.USER_READ_CURRENTLY_PLAYING,
-    SpotifyScope.USER_MODIFY_PLAYBACK_STATE,
-    SpotifyScope.USER_READ_PLAYBACK_STATE
+    SpotifyScope.AppRemoteControl,
+    SpotifyScope.Streaming,
+    SpotifyScope.UserReadCurrentlyPlaying,
+    SpotifyScope.UserModifyPlaybackState,
+    SpotifyScope.UserReadPlaybackState
 )
 
 object Model {
